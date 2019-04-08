@@ -392,15 +392,24 @@ module RestClient
         # conflicting information, e.g. if it was asked to render a payload as
         # x-www-form-urlencoded but a Content-Type application/json was
         # also supplied by the user.
+        # payload_headers.each_pair do |key, val|
+        #   if headers.include?(key) && headers[key] != val
+        #     warn("warning: Overriding #{key.inspect} header " +
+        #          "#{headers.fetch(key).inspect} with #{val.inspect} " +
+        #          "due to payload")
+        #   end
+        # end
+
+        # headers.merge!(payload_headers)
         payload_headers.each_pair do |key, val|
           if headers.include?(key) && headers[key] != val
             warn("warning: Overriding #{key.inspect} header " +
-                 "#{headers.fetch(key).inspect} with #{val.inspect} " +
+                 "#{val.inspect} with #{headers.fetch(key).inspect} " +
                  "due to payload")
           end
         end
 
-        headers.merge!(payload_headers)
+        payload_headers.merge!(headers)
       end
 
       # merge in cookies
